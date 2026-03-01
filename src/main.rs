@@ -248,11 +248,11 @@ fn truncate(s: &str, max: usize) -> String {
 }
 
 fn is_session_locked() -> bool {
-    let output = Command::new("loginctl")
-        .args(["show-session", "auto", "--property=LockedHint", "--value"])
+    let output = Command::new("pidof")
+        .arg("hyprlock")
         .output();
     match output {
-        Ok(o) => String::from_utf8_lossy(&o.stdout).trim() == "yes",
+        Ok(o) => o.status.success(),
         Err(_) => false,
     }
 }
